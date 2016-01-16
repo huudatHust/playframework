@@ -39,5 +39,12 @@ public class Products extends Controller {
 		flash("success", String.format("Successfully added product %s", product));
 		return redirect(routes.Products.list());
 	}
+	public static Result delete(String ean){
+		Product product = Product.findByEan(ean);
+		if(product == null)
+			return notFound(String.format("product %s is not exists." , ean) );
+		Product.remove(product);
+		return redirect(routes.Products.list());
+	}
 
 }
