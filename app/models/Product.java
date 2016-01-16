@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import play.db.ebean.Model;
@@ -28,8 +29,8 @@ public class Product extends Model implements PathBindable<Product>{
 	public byte[] picture;
     @OneToMany(mappedBy="product")
     public List<StockItem> stockItems;
-    
-    public List<Tag> tags = new LinkedList<Tag>();  // trường quan hệ nối với Tag
+    @ManyToMany
+    public List<Tag> tags;
     
     
     public static Finder<Long, Product> find = new Finder<>(Long.class, Product.class);
@@ -51,15 +52,6 @@ public class Product extends Model implements PathBindable<Product>{
 		
 		return find.where().eq("ean", ean).findUnique();
 	}
-	public static List<Product> findByName(String name){
-		List<Product> results = new ArrayList<>();
-		for(Product pro : products){
-			if(pro.name.toLowerCase().contains(name.toLowerCase())){
-				results.add(pro);
-			}
-		}
-		return results;
-	}
 	
 	
 	
@@ -67,32 +59,8 @@ public class Product extends Model implements PathBindable<Product>{
 	
 	
 	
-	//data moking
-	 private static List<Product> products;
-
-	  static {
-
-	    products = new ArrayList<Product>();
-
-	    products.add(new Product("1111111111111", "Paperclips 1", "Paperclips description 1"));
-
-	    products.add(new Product("2222222222222", "Paperclips 2",
-
-	        "Paperclips description 2"));
-
-	    products.add(new Product("3333333333333", "Paperclips 3",
-
-	        "Paperclips description 3"));
-
-	    products.add(new Product("4444444444444", "Paperclips 4",
-
-	        "Paperclips description 4"));
-
-	    products.add(new Product("5555555555555", "Paperclips 5",
-
-	        "Paperclips description 5"));
-
-	  }
+	
+	
 
 	@Override
 	public Product bind(String key, String value) {

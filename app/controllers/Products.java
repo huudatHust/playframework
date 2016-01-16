@@ -42,12 +42,6 @@ public class Products extends Controller {
 		}
 		
 		Product product = boundForm.get();
-		List<Tag> tags = new ArrayList<Tag>();
-		for(Tag tag : product.tags){
-			if(tag.id != null)
-				tags.add(Tag.findById(tag.id));
-		}
-		product.tags = tags;
 		 StockItem stockItem = new StockItem();
 	        stockItem.product = product;
 	        stockItem.quantity = 0L;
