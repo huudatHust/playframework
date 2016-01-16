@@ -55,7 +55,7 @@ public class Products extends Controller {
 		Product product = Product.findByEan(ean);
 		if(product == null)
 			return notFound(String.format("product %s is not exists." , ean) );
-		Product.remove(product);
+		 product.delete();
 		return redirect(routes.Products.list());
 	}
 
