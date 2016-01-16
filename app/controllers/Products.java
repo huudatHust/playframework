@@ -7,23 +7,32 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
-public class Products extends Controller{
+public class Products extends Controller {
 	private static final Form<Product> productForm = Form.form(Product.class);
-	public static Result list(){
+
+	public static Result list() {
 		List<Product> products = Product.findAll();
 		return ok(views.html.products.list.render(products));
 	}
-	public static Result newProduct(){
+
+	public static Result newProduct() {
 		return ok(views.html.products.details.render(productForm));
 	}
-	public static Result details(String ean){
+
+	public static Result details(String ean) {
 		return TODO;
 	}
-	public static Result save(){
+
+	public static Result save() {
 		Form<Product> boundForm = productForm.bindFromRequest();
+		if (boundForm.hasErrors()) {
+			flash("error", "Please correct the form below.");
+			return badRequest(views.html.products.details.render(boundForm));
+		}
 		Product product = boundForm.get();
 		product.save();
-		return  ok(String.format("Saved product %s", product));
+		flash("success", String.format("Successfully added product %s", product));
+		return redirect(routes.Products.list());
 	}
-	
+
 }
