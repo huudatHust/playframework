@@ -1,14 +1,18 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+
 import models.Product;
+import models.Tag;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Products extends Controller {
-	private static final Form<Product> productForm = Form.form(Product.class);
+	private static  Form<Product> productForm = Form.form(Product.class);
 
 	public static Result list() {
 		List<Product> products = Product.findAll();
@@ -24,8 +28,8 @@ public class Products extends Controller {
 		if(product == null){
 			return notFound(String.format("product %s is not exists", ean));
 		}
-		Form<Product> fillForm = productForm.fill(product);
-		return ok(views.html.products.details.render(fillForm));
+		productForm = productForm.fill(product);
+		return ok(views.html.products.details.render(productForm));
 	}
 
 	public static Result save() {
@@ -35,7 +39,15 @@ public class Products extends Controller {
 			return badRequest(views.html.products.details.render(boundForm));
 		}
 		Product product = boundForm.get();
+		List<Tag> tags = new ArrayList<Tag>();
+		for(Tag tag : product.tags){
+			if(tag.id != null)
+				tags.add(Tag.findById(tag.id));
+		}
+		product.tags = tags;
 		product.save();
+		
+		
 		flash("success", String.format("Successfully added product %s", product));
 		return redirect(routes.Products.list());
 	}
