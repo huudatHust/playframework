@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import play.db.ebean.Model;
 import play.mvc.PathBindable;
@@ -14,6 +15,10 @@ import play.data.validation.Constraints;
 @Entity
 public class Product extends Model implements PathBindable<Product>{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1022345032477317811L;
 	@Id
 	@Constraints.Required
 	public String ean;
@@ -21,7 +26,11 @@ public class Product extends Model implements PathBindable<Product>{
 	public String name;
 	public String description;
 	public byte[] picture;
-    public List<Tag> tags = new LinkedList<Tag>();    // trường quan hệ nối với Tag
+    @OneToMany(mappedBy="product")
+    public List<StockItem> stockItems;
+    
+    public List<Tag> tags = new LinkedList<Tag>();  // trường quan hệ nối với Tag
+    
     
     public static Finder<Long, Product> find = new Finder<>(Long.class, Product.class);
 	public Product(){

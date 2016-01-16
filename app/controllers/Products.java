@@ -7,6 +7,7 @@ import java.util.List;
 import com.avaje.ebean.Ebean;
 
 import models.Product;
+import models.StockItem;
 import models.Tag;
 import play.data.Form;
 import play.db.ebean.EbeanPlugin;
@@ -39,6 +40,7 @@ public class Products extends Controller {
 			flash("error", "Please correct the form below.");
 			return badRequest(views.html.products.details.render(boundForm));
 		}
+		
 		Product product = boundForm.get();
 		List<Tag> tags = new ArrayList<Tag>();
 		for(Tag tag : product.tags){
@@ -46,7 +48,12 @@ public class Products extends Controller {
 				tags.add(Tag.findById(tag.id));
 		}
 		product.tags = tags;
-		Ebean.save(product);
+		 StockItem stockItem = new StockItem();
+	        stockItem.product = product;
+	        stockItem.quantity = 0L;
+	    product.save();
+	    stockItem.save();
+//		Ebean.save(product);
 		
 		flash("success", String.format("Successfully added product %s", product));
 		return redirect(routes.Products.list());
