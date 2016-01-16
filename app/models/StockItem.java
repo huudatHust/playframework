@@ -14,6 +14,7 @@ public class StockItem extends Model{
 	private static final long serialVersionUID = -5752621662404326842L;
 	@Id
 	public Long id;
+	@ManyToOne
 	public Warehouse warehouse; // trường quan hệ nối với Warehouse
 	@ManyToOne
 	public Product product; // trường quan hệ nối với Product
