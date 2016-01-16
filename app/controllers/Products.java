@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.avaje.ebean.Ebean;
 
 import models.Product;
 import models.Tag;
 import play.data.Form;
+import play.db.ebean.EbeanPlugin;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -44,8 +46,7 @@ public class Products extends Controller {
 				tags.add(Tag.findById(tag.id));
 		}
 		product.tags = tags;
-		product.save();
-		
+		Ebean.save(product);
 		
 		flash("success", String.format("Successfully added product %s", product));
 		return redirect(routes.Products.list());
