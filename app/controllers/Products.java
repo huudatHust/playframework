@@ -1,11 +1,15 @@
 package controllers;
 
+import java.util.List;
+
+import models.Product;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Products extends Controller{
 	public static Result list(){
-		return TODO;
+		List<Product> products = Product.findAll();
+		return ok(views.html.products.list.render(products));
 	}
 	public static Result newProduct(){
 		return TODO;
